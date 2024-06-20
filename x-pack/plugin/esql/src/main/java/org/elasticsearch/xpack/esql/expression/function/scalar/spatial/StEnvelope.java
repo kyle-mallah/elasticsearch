@@ -37,6 +37,7 @@ import org.elasticsearch.xpack.esql.core.expression.TypeResolutions;
 import org.elasticsearch.xpack.esql.core.tree.NodeInfo;
 import org.elasticsearch.xpack.esql.core.tree.Source;
 import org.elasticsearch.xpack.esql.core.type.DataType;
+import org.elasticsearch.xpack.esql.core.util.SpatialCoordinateTypes;
 import org.elasticsearch.xpack.esql.expression.function.Example;
 import org.elasticsearch.xpack.esql.expression.function.FunctionInfo;
 import org.elasticsearch.xpack.esql.expression.function.Param;
@@ -104,7 +105,7 @@ public class StEnvelope extends UnaryScalarFunction {
 
     @ConvertEvaluator(extraName = "FromWKB", warnExceptions = { IllegalArgumentException.class })
     static BytesRef fromWellKnownBinary(BytesRef in) {
-        Geometry geometry = GeometryUtils.fromWellKnownBinary(in);
+        Geometry geometry = SpatialCoordinateTypes.UNSPECIFIED.wkbToGeometry(in);
         if (geometry == null) {
             throw new IllegalArgumentException("Invalid WKB geometry");
         }
